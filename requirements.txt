@@ -3,6 +3,7 @@ spotipy>=2.22.0
 pandas>=1.5.0
 mutagen>=1.45.0
 python-dotenv>=1.2.1
+streamlit>=1.30.0
 
 # Test and lint requirements
 pytest>=7.0.0
