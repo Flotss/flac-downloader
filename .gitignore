@@ -23,6 +23,7 @@ data/
 *.log
 *.csv
 .env
+.cache
 
 # Distribution
 build/
