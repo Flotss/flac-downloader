@@ -35,6 +35,7 @@ dependencies = [
     "spotipy>=2.22.0",
     "pandas>=1.5.0",
     "mutagen>=1.45.0",
+    "streamlit>=1.30.0",
 ]
 
 [project.optional-dependencies]
@@ -52,7 +53,7 @@ Repository = "https://github.com/yourusername/flac-downloader"
 Issues = "https://github.com/yourusername/flac-downloader/issues"
 
 [tool.setuptools]
-packages = ["src", "src.config", "src.core", "src.services", "src.utils"]
+packages = ["src", "src.config", "src.core", "src.services", "src.utils", "src.database"]
 
 [tool.black]
 line-length = 100
