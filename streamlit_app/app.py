@@ -23,6 +23,14 @@ from src.database import get_database
 from src.config import settings
 
 
+# ============ Display Constants ============
+MAX_TITLE_LENGTH = 50
+MAX_ARTIST_LENGTH = 30
+MAX_ERROR_REASON_LENGTH = 25
+MAX_PATH_LENGTH = 35
+BYTES_PER_MB = 1024 * 1024
+
+
 # ============ Page Configuration ============
 st.set_page_config(
     page_title="Dreamlight - FLAC Downloader",
@@ -414,19 +422,25 @@ elif page == "📋 Playlists":
 
             if submitted and playlist_url:
                 try:
-                    # Extract playlist ID from URL
-                    spotify_id = playlist_url.split("/")[-1].split("?")[0]
-                    name = playlist_name or f"Playlist {spotify_id[:8]}"
+                    # Extract playlist ID from URL using urlparse for robustness
+                    from urllib.parse import urlparse
+                    parsed = urlparse(playlist_url)
+                    path_parts = parsed.path.split("/")
+                    spotify_id = path_parts[-1] if path_parts else ""
+                    if not spotify_id:
+                        st.error("❌ Invalid Spotify playlist URL")
+                    else:
+                        name = playlist_name or f"Playlist {spotify_id[:8]}"
 
-                    playlist_id = db.add_playlist(
-                        spotify_id=spotify_id,
-                        name=name,
-                        url=playlist_url,
-                        track_count=0
-                    )
+                        playlist_id = db.add_playlist(
+                            spotify_id=spotify_id,
+                            name=name,
+                            url=playlist_url,
+                            track_count=0
+                        )
 
-                    st.success(f"✅ Playlist '{name}' added successfully!")
-                    st.rerun()
+                        st.success(f"✅ Playlist '{name}' added successfully!")
+                        st.rerun()
                 except Exception as e:
                     st.error(f"❌ Error adding playlist: {e}")
 
@@ -690,7 +704,7 @@ elif page == "⚙️ Settings":
     with col2:
         st.metric("Database Size", format_file_size(db_size))
     with col3:
-        st.metric("Database Path", db_path.split("/")[-1])
+        st.metric("Database Path", os.path.basename(db_path))
 
     st.text_input("Full Database Path", value=db_path, disabled=True)
 

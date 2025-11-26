@@ -21,7 +21,9 @@ class DatabaseManager:
         Args:
             db_path: Path to SQLite database file (uses default if not provided)
         """
-        self.db_path = db_path or os.path.join(settings.DATA_DIR, "dreamlight.db")
+        self.db_path = db_path or os.path.join(
+            settings.DATA_DIR, settings.DATABASE_FILE
+        )
         self._ensure_db_directory()
         self._init_database()
 
